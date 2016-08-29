@@ -9,7 +9,7 @@ blanks = ["___1___","___2___","___3___","___4___"]
 
 #all paragraphs have 4 main blanks. we ask for user input till all the blanks get filled. also we limit the number of guesses user gets to 5.
 
-#These are the individual strings for easy medium and hard.
+#These are the individual strings for noob easy medium hard and master.
 questions_noob = '''Game of Thrones premieres every ___1___ night on HBO. ___2___ is the author of this expansive book series.
 ___3___ was the most sought after casting decision for the creators. When they cast ___4___ for the role of ___3___ Lannister, they
 felt like they were on to someThing.'''
@@ -33,16 +33,19 @@ This leads to ___3___ Lannister summoning his armies to set fire to her homeland
 to remove Ned Stark as the Hand of the King. Ned Stark sends Beric Dondarion to ___4___ to bring to the false knight Gregor Clegane, the
 King's Justice.'''
 
-#These are the individual lists for correct answers. We check user input to These lists.
+#These are the individual lists for correct answers. We compare user input answer to These lists.
 answers_list_noob = ["Sunday","GRRM","Tyrion","Peter Dinklage"]
 answers_list_easy = ["Winterfell", "Eddard", "five", "Robb"]
 answers_list_medium = ["Jamie", "Tyrion", "Imp", "Cersei"]
 answers_list_hard = ["Targaryen", "Viserys", "Daenerys", "Dothraki"]
 answers_list_master = ["Catelyn", "circumstantial", "Tywin", "Riverrun"]
 
+#this is the list of the difficulty levels we have available to play.
 user_level_list = ["noob", "easy","medium","hard", "master"]
 
 user_level = raw_input("Type in your difficulty level: ")
+
+#This function takes in the input string from user for the difficulty level and returns corresponding list as output.
 def difficulty_level(user_level):
     '''
     Takes in user input for the level and gives the corresponding string or paragraphs.
@@ -53,18 +56,19 @@ def difficulty_level(user_level):
     else:
         if user_level == "noob":
             return questions_noob
-        if user_level == "easy":
+        elif user_level == "easy":
             return questions_easy
-        if user_level == "medium":
+        elif user_level == "medium":
             return questions_medium
-        if user_level == "hard":
+        elif user_level == "hard":
             return questions_hard
-        if user_level == "master":
+        elif user_level == "master":
             return questions_master
         pass
 
 #print difficulty_level(user_level)
 
+#This function takes difficulty level string as input and returns corresponding list of answers for that level.
 def relate_answer(user_level):
     '''
     Takes in user input for level and gives the corresponding list of answers.
@@ -83,6 +87,8 @@ def relate_answer(user_level):
 
 #print relate_answer(user_level)
 
+#This function has inputs for the given answers by user, the correct answers from our corresponding list and the index in that list.
+#It gives output right or wrong depending on the answers.
 def check_answer(user_answer, answers_list, answers_index):
     '''
     This is used to validate user answers with our correct answers list.
@@ -91,22 +97,26 @@ def check_answer(user_answer, answers_list, answers_index):
     if user_answer == answers_list[answers_index]:
         return "Correct"
     return "Wrong"
+    pass
 
 
 #print check_answer(user_answer,another_variable,answers)
 
+#This is our play function which doesn't take any inputs. It calls the other functions and uses their input-output to give the results.
 def play():
     '''
     This is the main function which allows to play the game/quiz.
     It calls the previous functions we have written.
     '''
     quiz = difficulty_level(user_level)         #gives the correct paragraph according to user input.
+    print 
     print quiz
     print "\nYou will get maximum 5 guesses for each blank. Good luck.\n"
-    answers_list = relate_answer(user_level)    #ensures we work in the proper list
+    answers_list = relate_answer(user_level)    #ensures we work in the proper list of answers.
     blanks_index = 0                            #initialize variables so it doesn't give error later on.
     answers_index = 0                           #initialize variables so it doesn't give error later on.
     number_of_guesses = 5                       #initialize variables so it doesn't give error later on.
+    guesses_limit = 0                           #initialize variables so it avoids magic numbers.
 
     while blanks_index < len(blanks):   #This loop executes so long as number of blanks are not replaced.
         user_answer = raw_input("type in your answer for " + blanks[blanks_index] + ": ")
@@ -117,12 +127,14 @@ def play():
             answers_index += 1
             number_of_guesses = 5
             print quiz
+            if blanks_index == len(blanks):
+                print "Congratulations! You win!"
         else:
             number_of_guesses -= 1
-            if number_of_guesses == 0:
+            if number_of_guesses == guesses_limit:
                 print "Game over!"
                 break
-            elif number_of_guesses < 0:
+            elif number_of_guesses < guesses_limit:
                 print "invalid"
                 #raise IOError('refusenik user')
                 break
@@ -130,6 +142,6 @@ def play():
                 print "please try again."
                 print "You have " + str(number_of_guesses) + " guesses left."
 
-    print "Congratulations! You win."
+    #print "Congratulations! You win."
 
 play()
